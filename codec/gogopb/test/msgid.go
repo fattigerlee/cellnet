@@ -5,10 +5,10 @@
 package test
 
 import (
-	"github.com/davyxu/cellnet"
+	"github.com/fattigerlee/cellnet"
+	"github.com/fattigerlee/cellnet/codec"
+	_ "github.com/fattigerlee/cellnet/codec/gogopb"
 	"reflect"
-	_ "github.com/davyxu/cellnet/codec/gogopb"
-	"github.com/davyxu/cellnet/codec"
 )
 
 func init() {

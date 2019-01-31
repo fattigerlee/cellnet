@@ -1,9 +1,9 @@
 package redix
 
 import (
-	"github.com/davyxu/cellnet"
-	"github.com/davyxu/cellnet/peer"
-	"github.com/davyxu/cellnet/util"
+	"github.com/fattigerlee/cellnet"
+	"github.com/fattigerlee/cellnet/peer"
+	"github.com/fattigerlee/cellnet/util"
 	"github.com/mediocregopher/radix.v2/pool"
 	"github.com/mediocregopher/radix.v2/redis"
 	"sync"

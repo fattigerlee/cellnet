@@ -1,7 +1,6 @@
 module github.com/fattigerlee/cellnet
 
 require (
-	github.com/davyxu/cellnet v0.0.0-20190129035837-c6f7cde394df
 	github.com/davyxu/golexer v0.0.0-20180314091252-f048a86ae200 // indirect
 	github.com/davyxu/golog v0.0.0-20190111014331-50a555c00fbc
 	github.com/davyxu/goobjfmt v0.0.0-20180817064625-baf5de0715b1

@@ -1,16 +1,16 @@
 package main
 
 import (
-	"github.com/davyxu/cellnet"
-	"github.com/davyxu/cellnet/peer"
-	"github.com/davyxu/cellnet/proc"
 	"github.com/davyxu/golog"
+	"github.com/fattigerlee/cellnet"
+	"github.com/fattigerlee/cellnet/peer"
+	"github.com/fattigerlee/cellnet/proc"
 
 	"fmt"
-	"github.com/davyxu/cellnet/codec"
-	_ "github.com/davyxu/cellnet/codec/json"
-	_ "github.com/davyxu/cellnet/peer/gorillaws"
-	_ "github.com/davyxu/cellnet/proc/gorillaws"
+	"github.com/fattigerlee/cellnet/codec"
+	_ "github.com/fattigerlee/cellnet/codec/json"
+	_ "github.com/fattigerlee/cellnet/peer/gorillaws"
+	_ "github.com/fattigerlee/cellnet/proc/gorillaws"
 	"reflect"
 )
 

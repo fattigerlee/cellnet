@@ -1,7 +1,7 @@
 package peer
 
 import (
-	"github.com/davyxu/cellnet"
+	"github.com/fattigerlee/cellnet"
 	"sync"
 	"sync/atomic"
 )

@@ -2,7 +2,7 @@ package udp
 
 import (
 	"encoding/binary"
-	"github.com/davyxu/cellnet/codec"
+	"github.com/fattigerlee/cellnet/codec"
 )
 
 const (

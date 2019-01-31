@@ -1,9 +1,9 @@
 package tests
 
 import (
-	"github.com/davyxu/cellnet"
-	"github.com/davyxu/cellnet/peer"
-	_ "github.com/davyxu/cellnet/peer/redix"
+	"github.com/fattigerlee/cellnet"
+	"github.com/fattigerlee/cellnet/peer"
+	_ "github.com/fattigerlee/cellnet/peer/redix"
 	"github.com/mediocregopher/radix.v2/redis"
 	"testing"
 	"time"

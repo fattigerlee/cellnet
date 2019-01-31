@@ -2,7 +2,7 @@ package rpc
 
 import (
 	"errors"
-	"github.com/davyxu/cellnet"
+	"github.com/fattigerlee/cellnet"
 )
 
 var (

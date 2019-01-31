@@ -1,8 +1,8 @@
 package gorillaws
 
 import (
-	"github.com/davyxu/cellnet"
-	"github.com/davyxu/cellnet/msglog"
+	"github.com/fattigerlee/cellnet"
+	"github.com/fattigerlee/cellnet/msglog"
 )
 
 // 带有RPC和relay功能

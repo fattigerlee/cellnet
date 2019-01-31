@@ -2,8 +2,8 @@ package relay
 
 import (
 	"errors"
-	"github.com/davyxu/cellnet"
-	"github.com/davyxu/cellnet/codec"
+	"github.com/fattigerlee/cellnet"
+	"github.com/fattigerlee/cellnet/codec"
 )
 
 var (

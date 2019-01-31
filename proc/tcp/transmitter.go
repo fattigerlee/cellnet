@@ -1,8 +1,8 @@
 package tcp
 
 import (
-	"github.com/davyxu/cellnet"
-	"github.com/davyxu/cellnet/util"
+	"github.com/fattigerlee/cellnet"
+	"github.com/fattigerlee/cellnet/util"
 	"io"
 	"net"
 )
