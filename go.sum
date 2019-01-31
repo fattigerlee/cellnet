@@ -1,0 +1,4 @@
+github.com/davyxu/cellnet v0.0.0-20190129035837-c6f7cde394df h1:GBPkQU7T/gpN5Y947y+BjdzQiiRO2FmjdB6idSX+4e4=
+github.com/davyxu/cellnet v0.0.0-20190129035837-c6f7cde394df/go.mod h1:YyjRD4BinuDQmXWX7iHjPtnVf3qp2EzVN2/7P/8GKXE=
+github.com/davyxu/golog v0.0.0-20190111014331-50a555c00fbc h1:knkOn/soMS8Z5AtNN1YHah6ASKWwTQMBktur0z+f1P0=
+github.com/davyxu/golog v0.0.0-20190111014331-50a555c00fbc/go.mod h1:YwChkFY5dCYt77yuPlWjcR6KlWqVJNbz3WkwC/8WgQk=
