@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	MsgIDSize = 2 // uint16
+	MsgIDSize = 12 // uint16
 )
 
 type WSMessageTransmitter struct {
@@ -38,8 +38,21 @@ func (WSMessageTransmitter) OnRecvMessage(ses cellnet.Session) (msg interface{},
 
 	switch messageType {
 	case websocket.BinaryMessage:
-		msgID := binary.LittleEndian.Uint16(raw)
-		msgData := raw[MsgIDSize:]
+		// 处理keep alive包
+		cmd := binary.BigEndian.Uint32(raw)
+		seq := binary.BigEndian.Uint32(raw[8:])
+		if cmd == 1 && seq == 999 {
+			conn.WriteMessage(websocket.BinaryMessage, raw)
+			return
+		}
+
+		if len(raw) < MsgIDSize+2 {
+			return nil, util.ErrMinPacket
+		}
+
+		// 处理其他消息包
+		msgID := binary.BigEndian.Uint16(raw[12:])
+		msgData := raw[MsgIDSize+2:]
 
 		msg, _, err = codec.DecodeMessage(int(msgID), msgData)
 	}
@@ -79,9 +92,12 @@ func (WSMessageTransmitter) OnSendMessage(ses cellnet.Session, msg interface{}) 
 		msgID = meta.ID
 	}
 
-	pkt := make([]byte, MsgIDSize+len(msgData))
-	binary.LittleEndian.PutUint16(pkt, uint16(msgID))
-	copy(pkt[MsgIDSize:], msgData)
+	pkt := make([]byte, MsgIDSize+2+len(msgData))
+	binary.BigEndian.PutUint32(pkt, uint32(0))
+	binary.BigEndian.PutUint32(pkt[4:], uint32(int32(len(msgData))+MsgIDSize+2))
+	binary.BigEndian.PutUint32(pkt[8:], uint32(0))
+	binary.BigEndian.PutUint16(pkt[12:], uint16(msgID))
+	copy(pkt[MsgIDSize+2:], msgData)
 
 	conn.WriteMessage(websocket.BinaryMessage, pkt)
 
