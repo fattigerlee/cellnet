@@ -39,4 +39,9 @@ func init() {
 		Type:  reflect.TypeOf((*cellnet.SessionInit)(nil)).Elem(),
 		ID:    int(util.StringHash("cellnet.SessionInit")),
 	})
+	cellnet.RegisterMessageMeta(&cellnet.MessageMeta{
+		Codec: codec.MustGetCodec("binary"),
+		Type:  reflect.TypeOf((*cellnet.SessionKeepAlive)(nil)).Elem(),
+		ID:    int(util.StringHash("cellnet.SessionKeepAlive")),
+	})
 }

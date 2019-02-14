@@ -42,7 +42,7 @@ func (WSMessageTransmitter) OnRecvMessage(ses cellnet.Session) (msg interface{},
 		cmd := binary.BigEndian.Uint32(raw)
 		seq := binary.BigEndian.Uint32(raw[8:])
 		if cmd == 1 && seq == 999 {
-			conn.WriteMessage(websocket.BinaryMessage, raw)
+			msg = &cellnet.SessionKeepAlive{}
 			return
 		}
 
@@ -66,6 +66,16 @@ func (WSMessageTransmitter) OnSendMessage(ses cellnet.Session, msg interface{}) 
 
 	// 转换错误，或者连接已经关闭时退出
 	if !ok || conn == nil {
+		return nil
+	}
+
+	// keep alive包
+	if _, ok := msg.(*cellnet.SessionKeepAlive); ok {
+		pkt := make([]byte, MsgIDSize)
+		binary.BigEndian.PutUint32(pkt, uint32(1))
+		binary.BigEndian.PutUint32(pkt[4:], uint32(MsgIDSize))
+		binary.BigEndian.PutUint32(pkt[8:], uint32(999))
+		conn.WriteMessage(websocket.BinaryMessage, pkt)
 		return nil
 	}
 
