@@ -51,7 +51,7 @@ func (WSMessageTransmitter) OnRecvMessage(ses cellnet.Session) (msg interface{},
 		}
 
 		// 处理其他消息包
-		msgID := binary.BigEndian.Uint16(raw[12:])
+		msgID := binary.BigEndian.Uint16(raw[MsgIDSize:])
 		msgData := raw[MsgIDSize+2:]
 
 		msg, _, err = codec.DecodeMessage(int(msgID), msgData)
@@ -104,7 +104,7 @@ func (WSMessageTransmitter) OnSendMessage(ses cellnet.Session, msg interface{}) 
 
 	pkt := make([]byte, MsgIDSize+2+len(msgData))
 	binary.BigEndian.PutUint32(pkt, uint32(0))
-	binary.BigEndian.PutUint32(pkt[4:], uint32(int32(len(msgData))+MsgIDSize+2))
+	binary.BigEndian.PutUint32(pkt[4:], uint32(MsgIDSize+2+int32(len(msgData))))
 	binary.BigEndian.PutUint32(pkt[8:], uint32(0))
 	binary.BigEndian.PutUint16(pkt[12:], uint16(msgID))
 	copy(pkt[MsgIDSize+2:], msgData)
