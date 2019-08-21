@@ -1,3 +1,5 @@
+github.com/davyxu/golexer v0.1.0 h1:PFavbgNV8PUH2HPU1G3o0QMcNJ3I4BkL8esbeenTyMU=
+github.com/davyxu/golexer v0.1.0/go.mod h1:K/1PVWqaQEwMs+N+VvaoS66o1BAAwso+jEgXKBIa8QY=
 github.com/davyxu/golog v0.1.0 h1:SsV3m2x37sCzFaQzq5OHc5S+PE2VMiL7XUx34JCa7mo=
 github.com/davyxu/golog v0.1.0/go.mod h1:YwChkFY5dCYt77yuPlWjcR6KlWqVJNbz3WkwC/8WgQk=
 github.com/davyxu/goobjfmt v0.1.0 h1:/Kz4X/UL4Jf5xOaQhP5DxzNtcwsfJqsz6ceoePeHBgA=
