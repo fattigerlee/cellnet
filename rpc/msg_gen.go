@@ -5,6 +5,7 @@ package rpc
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
+import "github.com/davyxu/cellnet"
 
 import io "io"
 
