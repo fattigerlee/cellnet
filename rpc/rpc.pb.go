@@ -79,8 +79,8 @@ func (m *RemoteCallACK) GetCallID() int64 {
 }
 
 func init() {
-	proto.RegisterType((*RemoteCallREQ)(nil), "gamedef.RemoteCallREQ")
-	proto.RegisterType((*RemoteCallACK)(nil), "gamedef.RemoteCallACK")
+	proto.RegisterType((*RemoteCallREQ)(nil), "RemoteCallREQ")
+	proto.RegisterType((*RemoteCallACK)(nil), "RemoteCallACK")
 }
 func (m *RemoteCallREQ) Marshal() (dAtA []byte, err error) {
 	size := m.Size()

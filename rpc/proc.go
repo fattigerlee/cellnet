@@ -8,7 +8,7 @@ import (
 
 type RemoteCallMsg interface {
 	GetMsgID() uint32
-	GetMsgData() []byte
+	GetData() []byte
 	GetCallID() int64
 }
 
@@ -23,7 +23,7 @@ func ResolveInboundEvent(inputEvent cellnet.Event) (ouputEvent cellnet.Event, ha
 		return inputEvent, false, nil
 	}
 
-	userMsg, _, err := codec.DecodeMessage(int(rpcMsg.GetMsgID()), rpcMsg.GetMsgData())
+	userMsg, _, err := codec.DecodeMessage(int(rpcMsg.GetMsgID()), rpcMsg.GetData())
 
 	if err != nil {
 		return inputEvent, false, err
@@ -67,7 +67,7 @@ func ResolveOutboundEvent(inputEvent cellnet.Event) (handled bool, err error) {
 		return false, nil
 	}
 
-	userMsg, _, err := codec.DecodeMessage(int(rpcMsg.GetMsgID()), rpcMsg.GetMsgData())
+	userMsg, _, err := codec.DecodeMessage(int(rpcMsg.GetMsgID()), rpcMsg.GetData())
 
 	if err != nil {
 		return false, err
