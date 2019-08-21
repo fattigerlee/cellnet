@@ -2,7 +2,7 @@ package http
 
 import (
 	"bytes"
-	"github.com/fattigerlee/cellnet"
+	"github.com/davyxu/cellnet"
 	"html/template"
 	"io"
 	"io/ioutil"

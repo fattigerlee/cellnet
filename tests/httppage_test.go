@@ -2,12 +2,14 @@ package tests
 
 import (
 	"fmt"
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/peer"
-	httppeer "github.com/fattigerlee/cellnet/peer/http"
-	"github.com/fattigerlee/cellnet/proc"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/peer"
+	httppeer "github.com/davyxu/cellnet/peer/http"
+	"github.com/davyxu/cellnet/proc"
+	"io/ioutil"
 	"net/http"
 	"testing"
+	"time"
 )
 
 const pageAddress = "127.0.0.1:10087"
@@ -36,4 +38,29 @@ func TestPrintPage(t *testing.T) {
 
 	p.Stop()
 
+}
+
+func validPage(t *testing.T, url, expectAck string) {
+	c := &http.Client{
+		Timeout: time.Second * 5,
+	}
+	resp, err := c.Get(url)
+	if err != nil {
+		t.Log("http req failed", err)
+		t.FailNow()
+	}
+
+	defer resp.Body.Close()
+	bodyData, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Log("http response failed", err)
+		t.FailNow()
+	}
+
+	body := string(bodyData)
+
+	if body != expectAck {
+		t.Log("unexpect result", err, body)
+		t.FailNow()
+	}
 }

@@ -1,9 +1,9 @@
 package relay
 
 import (
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/codec"
-	"github.com/fattigerlee/cellnet/msglog"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/codec"
+	"github.com/davyxu/cellnet/msglog"
 )
 
 type PassthroughContent struct {
@@ -31,11 +31,11 @@ func ResoleveInboundEvent(inputEvent cellnet.Event) (ouputEvent cellnet.Event, h
 			}
 		}
 
-		if log.IsDebugEnabled() && !msglog.IsBlockedMessageByID(int(relayMsg.MsgID)) {
+		if msglog.IsMsgLogValid(int(relayMsg.MsgID)) {
 
 			peerInfo := inputEvent.Session().Peer().(cellnet.PeerProperty)
 
-			log.Debugf("#relay.recv(%s)@%d len: %d %s <%s>| %s",
+			log.Debugf("#relay.recv(%s)@%d len: %d %s {%s}| %s",
 				peerInfo.Name(),
 				inputEvent.Session().ID(),
 				cellnet.MessageSize(ev.Message()),
@@ -62,7 +62,7 @@ func ResolveOutboundEvent(inputEvent cellnet.Event) (handled bool, err error) {
 
 	switch relayMsg := inputEvent.Message().(type) {
 	case *RelayACK:
-		if log.IsDebugEnabled() && !msglog.IsBlockedMessageByID(int(relayMsg.MsgID)) {
+		if msglog.IsMsgLogValid(int(relayMsg.MsgID)) {
 
 			var payload interface{}
 			if relayMsg.MsgID != 0 {
@@ -75,7 +75,7 @@ func ResolveOutboundEvent(inputEvent cellnet.Event) (handled bool, err error) {
 
 			peerInfo := inputEvent.Session().Peer().(cellnet.PeerProperty)
 
-			log.Debugf("#relay.send(%s)@%d len: %d %s <%s>| %s",
+			log.Debugf("#relay.send(%s)@%d len: %d %s {%s}| %s",
 				peerInfo.Name(),
 				inputEvent.Session().ID(),
 				cellnet.MessageSize(payload),

@@ -2,14 +2,14 @@ package gorillaws
 
 import (
 	"encoding/binary"
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/codec"
-	"github.com/fattigerlee/cellnet/util"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/codec"
+	"github.com/davyxu/cellnet/util"
 	"github.com/gorilla/websocket"
 )
 
 const (
-	MsgIDSize = 12 // uint16
+	MsgIDSize = 4 // uint32
 )
 
 type WSMessageTransmitter struct {
@@ -38,21 +38,8 @@ func (WSMessageTransmitter) OnRecvMessage(ses cellnet.Session) (msg interface{},
 
 	switch messageType {
 	case websocket.BinaryMessage:
-		// 处理keep alive包
-		cmd := binary.BigEndian.Uint32(raw)
-		seq := binary.BigEndian.Uint32(raw[8:])
-		if cmd == 1 && seq == 999 {
-			msg = &cellnet.SessionKeepAlive{}
-			return
-		}
-
-		if len(raw) < MsgIDSize+2 {
-			return nil, util.ErrMinPacket
-		}
-
-		// 处理其他消息包
-		msgID := binary.BigEndian.Uint16(raw[MsgIDSize:])
-		msgData := raw[MsgIDSize+2:]
+		msgID := binary.LittleEndian.Uint32(raw)
+		msgData := raw[MsgIDSize:]
 
 		msg, _, err = codec.DecodeMessage(int(msgID), msgData)
 	}
@@ -66,16 +53,6 @@ func (WSMessageTransmitter) OnSendMessage(ses cellnet.Session, msg interface{}) 
 
 	// 转换错误，或者连接已经关闭时退出
 	if !ok || conn == nil {
-		return nil
-	}
-
-	// keep alive包
-	if _, ok := msg.(*cellnet.SessionKeepAlive); ok {
-		pkt := make([]byte, MsgIDSize)
-		binary.BigEndian.PutUint32(pkt, uint32(1))
-		binary.BigEndian.PutUint32(pkt[4:], uint32(MsgIDSize))
-		binary.BigEndian.PutUint32(pkt[8:], uint32(999))
-		conn.WriteMessage(websocket.BinaryMessage, pkt)
 		return nil
 	}
 
@@ -102,12 +79,9 @@ func (WSMessageTransmitter) OnSendMessage(ses cellnet.Session, msg interface{}) 
 		msgID = meta.ID
 	}
 
-	pkt := make([]byte, MsgIDSize+2+len(msgData))
-	binary.BigEndian.PutUint32(pkt, uint32(0))
-	binary.BigEndian.PutUint32(pkt[4:], uint32(MsgIDSize+2+int32(len(msgData))))
-	binary.BigEndian.PutUint32(pkt[8:], uint32(0))
-	binary.BigEndian.PutUint16(pkt[12:], uint16(msgID))
-	copy(pkt[MsgIDSize+2:], msgData)
+	pkt := make([]byte, MsgIDSize+len(msgData))
+	binary.LittleEndian.PutUint32(pkt, uint32(msgID))
+	copy(pkt[MsgIDSize:], msgData)
 
 	conn.WriteMessage(websocket.BinaryMessage, pkt)
 

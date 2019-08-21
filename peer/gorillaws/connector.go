@@ -1,11 +1,13 @@
 package gorillaws
 
 import (
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/peer"
+	"fmt"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/peer"
+	"github.com/davyxu/cellnet/util"
 	"github.com/gorilla/websocket"
+	"net"
 	"net/http"
-	"strings"
 	"sync"
 	"time"
 )
@@ -44,6 +46,14 @@ func (self *wsConnector) Session() cellnet.Session {
 	return self.defaultSes
 }
 
+func (self *wsConnector) Port() int {
+	if self.defaultSes.conn == nil {
+		return 0
+	}
+
+	return self.defaultSes.conn.LocalAddr().(*net.TCPAddr).Port
+}
+
 func (self *wsConnector) SetSessionManager(raw interface{}) {
 	self.CoreSessionManager = raw.(peer.CoreSessionManager)
 }
@@ -79,7 +89,9 @@ func (self *wsConnector) SetReconnectDuration(v time.Duration) {
 const reportConnectFailedLimitTimes = 3
 
 func (self *wsConnector) connect(address string) {
+
 	self.SetRunning(true)
+
 	for {
 		self.tryConnTimes++
 
@@ -87,11 +99,18 @@ func (self *wsConnector) connect(address string) {
 		dialer.Proxy = http.ProxyFromEnvironment
 		dialer.HandshakeTimeout = 45 * time.Second
 
+		addrObj, err := util.ParseAddress(address)
+		if err != nil {
+			log.Errorf("invalid address: %s", address)
+			break
+		}
+
+		// 处理非法路径问题
 		var finalAddress string
-		if strings.HasPrefix(address, "ws://") {
+		if addrObj.Scheme == "ws" || addrObj.Scheme == "wss" {
 			finalAddress = address
 		} else {
-			finalAddress = "ws://" + address
+			finalAddress = "ws://" + fmt.Sprintf("%s:%d%s", addrObj.Host, addrObj.MinPort, addrObj.Path)
 		}
 
 		conn, _, err := dialer.Dial(finalAddress, nil)
@@ -105,20 +124,24 @@ func (self *wsConnector) connect(address string) {
 				if self.tryConnTimes == reportConnectFailedLimitTimes {
 					log.Errorf("(%s) continue reconnecting, but mute log", self.Name())
 				}
-
-				// 没重连就退出
-				if self.ReconnectDuration() == 0 || self.IsStopping() {
-
-					self.ProcEvent(&cellnet.RecvMsgEvent{Ses: self.defaultSes, Msg: &cellnet.SessionConnectError{}})
-					break
-				}
-
-				// 有重连就等待
-				time.Sleep(self.ReconnectDuration())
-
-				// 继续连接
-				continue
 			}
+
+			// 没重连就退出
+			if self.ReconnectDuration() == 0 || self.IsStopping() {
+
+				self.ProcEvent(&cellnet.RecvMsgEvent{
+					Ses: self.defaultSes,
+					Msg: &cellnet.SessionConnectError{},
+				})
+				break
+			}
+
+			// 有重连就等待
+			time.Sleep(self.ReconnectDuration())
+
+			// 继续连接
+			continue
+
 		}
 
 		self.sesEndSignal.Add(1)
@@ -141,6 +164,9 @@ func (self *wsConnector) connect(address string) {
 		// 有重连就等待
 		time.Sleep(self.ReconnectDuration())
 	}
+
+	self.SetRunning(false)
+	self.EndStopping()
 
 }
 

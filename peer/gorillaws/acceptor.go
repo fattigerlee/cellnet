@@ -1,9 +1,9 @@
 package gorillaws
 
 import (
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/peer"
-	"github.com/fattigerlee/cellnet/util"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/peer"
+	"github.com/davyxu/cellnet/util"
 	"github.com/gorilla/websocket"
 	"net"
 	"net/http"
@@ -82,7 +82,7 @@ func (self *wsAcceptor) Start() cellnet.Peer {
 		}
 
 		ses := newSession(c, self, nil)
-
+		ses.SetContext("request", r)
 		ses.Start()
 
 		self.ProcEvent(&cellnet.RecvMsgEvent{Ses: ses, Msg: &cellnet.SessionAccepted{}})

@@ -40,17 +40,12 @@ type SessionClosed struct {
 type SessionCloseNotify struct {
 }
 
-// keep alive
-type SessionKeepAlive struct {
-}
-
 func (self *SessionInit) String() string         { return fmt.Sprintf("%+v", *self) }
 func (self *SessionAccepted) String() string     { return fmt.Sprintf("%+v", *self) }
 func (self *SessionConnected) String() string    { return fmt.Sprintf("%+v", *self) }
 func (self *SessionConnectError) String() string { return fmt.Sprintf("%+v", *self) }
 func (self *SessionClosed) String() string       { return fmt.Sprintf("%+v", *self) }
 func (self *SessionCloseNotify) String() string  { return fmt.Sprintf("%+v", *self) }
-func (self *SessionKeepAlive) String() string    { return fmt.Sprintf("%+v", *self) }
 
 // 使用类型断言判断是否为系统消息
 func (self *SessionInit) SystemMessage()         {}
@@ -59,4 +54,3 @@ func (self *SessionConnected) SystemMessage()    {}
 func (self *SessionConnectError) SystemMessage() {}
 func (self *SessionClosed) SystemMessage()       {}
 func (self *SessionCloseNotify) SystemMessage()  {}
-func (self *SessionKeepAlive) SystemMessage()    {}

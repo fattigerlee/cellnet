@@ -1,10 +1,10 @@
 package peer
 
 import (
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/codec"
-	_ "github.com/fattigerlee/cellnet/codec/binary"
-	"github.com/fattigerlee/cellnet/util"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/codec"
+	_ "github.com/davyxu/cellnet/codec/binary"
+	"github.com/davyxu/cellnet/util"
 	"reflect"
 )
 
@@ -38,10 +38,5 @@ func init() {
 		Codec: codec.MustGetCodec("binary"),
 		Type:  reflect.TypeOf((*cellnet.SessionInit)(nil)).Elem(),
 		ID:    int(util.StringHash("cellnet.SessionInit")),
-	})
-	cellnet.RegisterMessageMeta(&cellnet.MessageMeta{
-		Codec: codec.MustGetCodec("binary"),
-		Type:  reflect.TypeOf((*cellnet.SessionKeepAlive)(nil)).Elem(),
-		ID:    int(util.StringHash("cellnet.SessionKeepAlive")),
 	})
 }

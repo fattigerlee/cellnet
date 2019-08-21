@@ -2,9 +2,9 @@ package udp
 
 import (
 	"encoding/binary"
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/codec"
-	"github.com/fattigerlee/cellnet/peer/udp"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/codec"
+	"github.com/davyxu/cellnet/peer/udp"
 )
 
 func sendPacket(writer udp.DataWriter, ctx cellnet.ContextSet, msg interface{}) error {

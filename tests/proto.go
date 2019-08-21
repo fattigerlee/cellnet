@@ -2,10 +2,10 @@ package tests
 
 import (
 	"fmt"
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/codec"
-	_ "github.com/fattigerlee/cellnet/codec/binary"
-	"github.com/fattigerlee/cellnet/util"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/codec"
+	_ "github.com/davyxu/cellnet/codec/binary"
+	"github.com/davyxu/cellnet/util"
 	"reflect"
 )
 

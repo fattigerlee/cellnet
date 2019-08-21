@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	"github.com/fattigerlee/cellnet"
+	"github.com/davyxu/cellnet"
 	"time"
 )
 

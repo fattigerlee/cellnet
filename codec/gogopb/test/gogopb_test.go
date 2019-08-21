@@ -1,8 +1,8 @@
 package test
 
 import (
-	"github.com/fattigerlee/cellnet/codec"
-	_ "github.com/fattigerlee/cellnet/codec/gogopb"
+	"github.com/davyxu/cellnet/codec"
+	_ "github.com/davyxu/cellnet/codec/gogopb"
 	"reflect"
 	"testing"
 )

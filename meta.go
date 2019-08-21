@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
+	"sync"
 )
 
 type context struct {
@@ -16,21 +17,18 @@ type context struct {
 // 消息元信息
 type MessageMeta struct {
 	Codec Codec        // 消息用到的编码
-	Type  reflect.Type // 消息类型
+	Type  reflect.Type // 消息类型, 注册时使用指针类型
 
 	ID int // 消息ID (二进制协议中使用)
 
-	ctxList []*context
+	ctxListGuard sync.RWMutex
+	ctxList      []*context
 }
 
 func (self *MessageMeta) TypeName() string {
 
 	if self == nil {
 		return ""
-	}
-
-	if self.Type.Kind() == reflect.Ptr {
-		return self.Type.Elem().Name()
 	}
 
 	return self.Type.Name()
@@ -42,15 +40,10 @@ func (self *MessageMeta) FullName() string {
 		return ""
 	}
 
-	rtype := self.Type
-	if rtype.Kind() == reflect.Ptr {
-		rtype = rtype.Elem()
-	}
-
 	var sb strings.Builder
-	sb.WriteString(path.Base(rtype.PkgPath()))
+	sb.WriteString(path.Base(self.Type.PkgPath()))
 	sb.WriteString(".")
-	sb.WriteString(rtype.Name())
+	sb.WriteString(self.Type.Name())
 
 	return sb.String()
 }
@@ -66,6 +59,10 @@ func (self *MessageMeta) NewType() interface{} {
 
 // 为meta对应的名字绑定上下文
 func (self *MessageMeta) SetContext(name string, data interface{}) *MessageMeta {
+
+	self.ctxListGuard.Lock()
+	defer self.ctxListGuard.Unlock()
+
 	for _, ctx := range self.ctxList {
 
 		if ctx.name == name {
@@ -83,16 +80,45 @@ func (self *MessageMeta) SetContext(name string, data interface{}) *MessageMeta 
 }
 
 // 获取meta对应的名字绑定上下文
-func (self *MessageMeta) GetContext(name string) (interface{}, bool) {
+func (self *MessageMeta) GetContext(key string) (interface{}, bool) {
+
+	self.ctxListGuard.RLock()
+	defer self.ctxListGuard.RUnlock()
 
 	for _, ctx := range self.ctxList {
 
-		if ctx.name == name {
+		if ctx.name == key {
 			return ctx.data, true
 		}
 	}
 
 	return nil, false
+}
+
+// 按字符串格式取context
+func (self *MessageMeta) GetContextAsString(key, defaultValue string) string {
+
+	if v, ok := self.GetContext(key); ok {
+
+		if str, ok := v.(string); ok {
+			return str
+		}
+	}
+
+	return defaultValue
+}
+
+// 按字符串格式取context
+func (self *MessageMeta) GetContextAsInt(name string, defaultValue int) int {
+
+	if v, ok := self.GetContext(name); ok {
+
+		if intV, ok := v.(int); ok {
+			return intV
+		}
+	}
+
+	return defaultValue
 }
 
 var (
@@ -116,7 +142,10 @@ Type -> Meta
 // 注册消息元信息
 func RegisterMessageMeta(meta *MessageMeta) *MessageMeta {
 
-	// 非http类,才需要包装Type必须唯一
+	// 注册时, 统一为非指针类型
+	if meta.Type.Kind() == reflect.Ptr {
+		meta.Type = meta.Type.Elem()
+	}
 
 	if _, ok := metaByType[meta.Type]; ok {
 		panic(fmt.Sprintf("Duplicate message meta register by type: %d name: %s", meta.ID, meta.Type.Name()))
@@ -208,6 +237,7 @@ func MessageMetaByID(id int) *MessageMeta {
 	return nil
 }
 
+// 消息名（没有包，纯类型名）
 func MessageToName(msg interface{}) string {
 
 	if msg == nil {

@@ -2,10 +2,11 @@ package mysql
 
 import (
 	"database/sql"
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/peer"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/peer"
 	"github.com/go-sql-driver/mysql"
 	"sync"
+	"time"
 )
 
 type mysqlConnector struct {
@@ -15,6 +16,8 @@ type mysqlConnector struct {
 
 	db      *sql.DB
 	dbGuard sync.RWMutex
+
+	reconDur time.Duration
 }
 
 func (self *mysqlConnector) IsReady() bool {
@@ -24,6 +27,11 @@ func (self *mysqlConnector) IsReady() bool {
 func (self *mysqlConnector) Raw() interface{} {
 
 	return self.dbConn()
+}
+
+func (self *mysqlConnector) Operate(callback func(client interface{}) interface{}) interface{} {
+
+	return callback(self.dbConn())
 }
 
 func (self *mysqlConnector) dbConn() *sql.DB {
@@ -38,9 +46,27 @@ func (self *mysqlConnector) TypeName() string {
 
 func (self *mysqlConnector) Start() cellnet.Peer {
 
-	self.tryConnect()
+	for {
+
+		self.tryConnect()
+
+		if self.reconDur == 0 || self.IsReady() {
+			break
+		}
+
+		time.Sleep(self.reconDur)
+	}
 
 	return self
+}
+
+func (self *mysqlConnector) ReconnectDuration() time.Duration {
+
+	return self.reconDur
+}
+
+func (self *mysqlConnector) SetReconnectDuration(v time.Duration) {
+	self.reconDur = v
 }
 
 func (self *mysqlConnector) tryConnect() {
@@ -52,7 +78,7 @@ func (self *mysqlConnector) tryConnect() {
 		return
 	}
 
-	log.Infof("Connect to mysql database: %s/%s...", config.Addr, config.DBName)
+	log.Infof("Connecting to mysql %s/%s...", config.Addr, config.DBName)
 
 	db, err := sql.Open("mysql", self.Address())
 	if err != nil {
@@ -60,14 +86,14 @@ func (self *mysqlConnector) tryConnect() {
 		return
 	}
 
-	db.SetMaxOpenConns(int(self.PoolConnCount))
-	db.SetMaxIdleConns(int(self.PoolConnCount / 2))
-
 	err = db.Ping()
 	if err != nil {
 		log.Errorln(err)
 		return
 	}
+
+	db.SetMaxOpenConns(int(self.PoolConnCount))
+	db.SetMaxIdleConns(int(self.PoolConnCount / 2))
 
 	self.dbGuard.Lock()
 	self.db = db

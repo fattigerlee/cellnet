@@ -5,19 +5,6 @@ import (
 	"net/http"
 )
 
-// Websocket接受器，具备会话访问
-type WSAcceptor interface {
-	GenericPeer
-
-	SetHttps(certfile, keyfile string)
-
-	// 设置升级器
-	SetUpgrader(upgrader interface{})
-
-	// 访问会话
-	SessionAccessor
-}
-
 type HTTPAcceptor interface {
 	GenericPeer
 
@@ -37,10 +24,17 @@ type HTTPAcceptor interface {
 	SetTemplateFunc(f []template.FuncMap)
 }
 
+type HTTPRequest struct {
+	REQMsg       interface{} // 请求消息, 指针
+	ACKMsg       interface{} // 回应消息, 指针
+	REQCodecName string      // 可为空, 默认为json格式
+	ACKCodecName string      // 可为空, 默认为json格式
+}
+
 // HTTP连接器接口
 type HTTPConnector interface {
 	GenericPeer
-	Request(method, path string, raw interface{}) (interface{}, error)
+	Request(method, path string, param *HTTPRequest) error
 }
 
 type HTTPSession interface {

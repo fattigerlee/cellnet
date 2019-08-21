@@ -1,9 +1,9 @@
 package tcp
 
 import (
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/peer"
-	"github.com/fattigerlee/cellnet/util"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/peer"
+	"github.com/davyxu/cellnet/util"
 	"net"
 	"strings"
 )
@@ -95,7 +95,7 @@ func (self *tcpAcceptor) accept() {
 				log.Errorf("#tcp.accept failed(%s) %v", self.Name(), err.Error())
 			}
 
-			break
+			continue
 		}
 
 		// 处理连接进入独立线程, 防止accept无法响应

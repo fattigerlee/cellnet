@@ -3,15 +3,15 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/codec"
+	_ "github.com/davyxu/cellnet/codec/json"
+	"github.com/davyxu/cellnet/peer"
+	_ "github.com/davyxu/cellnet/peer/tcp"
+	"github.com/davyxu/cellnet/proc"
+	_ "github.com/davyxu/cellnet/proc/tcp"
+	"github.com/davyxu/cellnet/util"
 	"github.com/davyxu/golog"
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/codec"
-	_ "github.com/fattigerlee/cellnet/codec/json"
-	"github.com/fattigerlee/cellnet/peer"
-	_ "github.com/fattigerlee/cellnet/peer/tcp"
-	"github.com/fattigerlee/cellnet/proc"
-	_ "github.com/fattigerlee/cellnet/proc/tcp"
-	"github.com/fattigerlee/cellnet/util"
 	"log"
 	"os"
 	"reflect"
@@ -110,7 +110,7 @@ func init() {
 	})
 }
 
-// go build -o bench.exe main.go
+// go build -o bench.exe service.go
 // ./bench.exe -profile=mem.pprof
 // go tool pprof -alloc_space -top bench.exe mem.pprof
 func main() {

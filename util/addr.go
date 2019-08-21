@@ -3,7 +3,7 @@ package util
 import (
 	"errors"
 	"fmt"
-	"github.com/fattigerlee/cellnet"
+	"github.com/davyxu/cellnet"
 	"net"
 	"strconv"
 	"strings"

@@ -3,10 +3,10 @@
 package relay
 
 import (
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/codec"
+	_ "github.com/davyxu/cellnet/codec/protoplus"
 	"github.com/davyxu/protoplus/proto"
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/codec"
-	_ "github.com/fattigerlee/cellnet/codec/protoplus"
 	"reflect"
 	"unsafe"
 )

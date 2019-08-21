@@ -1,10 +1,10 @@
 package udp
 
 import (
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/msglog"
-	"github.com/fattigerlee/cellnet/peer/udp"
-	"github.com/fattigerlee/cellnet/proc"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/msglog"
+	"github.com/davyxu/cellnet/peer/udp"
+	"github.com/davyxu/cellnet/proc"
 )
 
 type UDPMessageTransmitter struct {

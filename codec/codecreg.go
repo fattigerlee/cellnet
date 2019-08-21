@@ -2,7 +2,7 @@ package codec
 
 import (
 	"fmt"
-	"github.com/fattigerlee/cellnet"
+	"github.com/davyxu/cellnet"
 )
 
 var registedCodecs []cellnet.Codec

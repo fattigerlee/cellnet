@@ -3,8 +3,8 @@ package util
 import (
 	"encoding/binary"
 	"errors"
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/codec"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/codec"
 	"io"
 )
 
@@ -15,14 +15,14 @@ var (
 )
 
 const (
-	bodySize  = 2 // 包体大小字段
-	msgIDSize = 2 // 消息ID字段
+	bodySize  = 4 // 包体大小字段
+	msgIDSize = 4 // 消息ID字段
 )
 
 // 接收Length-Type-Value格式的封包流程
 func RecvLTVPacket(reader io.Reader, maxPacketSize int) (msg interface{}, err error) {
 
-	// Size为uint16，占2字节
+	// Size为uint32，占4字节
 	var sizeBuffer = make([]byte, bodySize)
 
 	// 持续读取Size直到读到为止
@@ -38,9 +38,9 @@ func RecvLTVPacket(reader io.Reader, maxPacketSize int) (msg interface{}, err er
 	}
 
 	// 用小端格式读取Size
-	size := binary.LittleEndian.Uint16(sizeBuffer)
+	size := binary.LittleEndian.Uint32(sizeBuffer)
 
-	if maxPacketSize > 0 && size >= uint16(maxPacketSize) {
+	if maxPacketSize > 0 && size >= uint32(maxPacketSize) {
 		return nil, ErrMaxPacket
 	}
 
@@ -59,7 +59,7 @@ func RecvLTVPacket(reader io.Reader, maxPacketSize int) (msg interface{}, err er
 		return nil, ErrShortMsgID
 	}
 
-	msgid := binary.LittleEndian.Uint16(body)
+	msgid := binary.LittleEndian.Uint32(body)
 
 	msgData := body[msgIDSize:]
 
@@ -102,10 +102,10 @@ func SendLTVPacket(writer io.Writer, ctx cellnet.ContextSet, data interface{}) e
 	pkt := make([]byte, bodySize+msgIDSize+len(msgData))
 
 	// Length
-	binary.LittleEndian.PutUint16(pkt, uint16(msgIDSize+len(msgData)))
+	binary.LittleEndian.PutUint32(pkt, uint32(msgIDSize+len(msgData)))
 
 	// Type
-	binary.LittleEndian.PutUint16(pkt[bodySize:], uint16(msgID))
+	binary.LittleEndian.PutUint32(pkt[bodySize:], uint32(msgID))
 
 	// Value
 	copy(pkt[bodySize+msgIDSize:], msgData)

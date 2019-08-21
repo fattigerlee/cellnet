@@ -2,7 +2,7 @@ package proc
 
 import (
 	"fmt"
-	"github.com/fattigerlee/cellnet"
+	"github.com/davyxu/cellnet"
 	"sort"
 )
 

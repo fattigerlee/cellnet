@@ -1,10 +1,10 @@
 package tests
 
 import (
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/peer"
-	"github.com/fattigerlee/cellnet/proc"
-	"github.com/fattigerlee/cellnet/relay"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/peer"
+	"github.com/davyxu/cellnet/proc"
+	"github.com/davyxu/cellnet/relay"
 	"reflect"
 	"sync"
 	"testing"
@@ -153,9 +153,9 @@ func TestRelay(t *testing.T) {
 	relay_Signal = NewSignalTester(t)
 	relay_Signal.SetTimeout(time.Second * 5)
 
-	relay_backend()
-
 	relay_agent()
+
+	relay_backend()
 
 	relay_client()
 

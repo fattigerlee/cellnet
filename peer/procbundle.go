@@ -2,7 +2,7 @@ package peer
 
 import (
 	"errors"
-	"github.com/fattigerlee/cellnet"
+	"github.com/davyxu/cellnet"
 )
 
 // 手动投递消息， 兼容v2的设计

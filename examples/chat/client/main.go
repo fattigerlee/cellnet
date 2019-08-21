@@ -2,16 +2,16 @@ package main
 
 import (
 	"bufio"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/examples/chat/proto"
+	"github.com/davyxu/cellnet/peer"
+	"github.com/davyxu/cellnet/proc"
 	"github.com/davyxu/golog"
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/examples/chat/proto"
-	"github.com/fattigerlee/cellnet/peer"
-	"github.com/fattigerlee/cellnet/proc"
 	"os"
 	"strings"
 
-	_ "github.com/fattigerlee/cellnet/peer/tcp"
-	_ "github.com/fattigerlee/cellnet/proc/tcp"
+	_ "github.com/davyxu/cellnet/peer/tcp"
+	_ "github.com/davyxu/cellnet/proc/tcp"
 )
 
 var log = golog.New("client")
@@ -61,6 +61,8 @@ func main() {
 
 	// 事件队列开始循环
 	queue.StartLoop()
+
+	log.Debugln("Ready to chat!")
 
 	// 阻塞的从命令行获取聊天输入
 	ReadConsole(func(str string) {

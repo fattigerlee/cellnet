@@ -2,8 +2,8 @@ package http
 
 import (
 	"errors"
-	"github.com/fattigerlee/cellnet"
-	"github.com/fattigerlee/cellnet/peer"
+	"github.com/davyxu/cellnet"
+	"github.com/davyxu/cellnet/peer"
 	"html/template"
 	"net/http"
 )

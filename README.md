@@ -46,6 +46,8 @@ cellnet经过多个版本的迭代，无论是作为初学者学习的范例，�
 
     侦听器的优雅重启, 支持json及form的收发及封装。编写游戏服务器时，不再需要使用第三方HTTP服务器对接SDK。
 
+    注: 如需要对接大规模网页, 请使用第三方专业网络库,如(https://github.com/gin-gonic/gin), cellnet的http支持主要目的在用统一的地址及peer管理
+
 - WebSocket
 
     采用(github.com/gorilla/websocket)实现
@@ -110,13 +112,13 @@ cellnet经过多个版本的迭代，无论是作为初学者学习的范例，�
 编译和使用cellnet，请下载Go1.10以上版本
 
 ```
-  go get -v github.com/davyxu/cellnet
+  go get -u -v github.com/davyxu/cellnet
 
-  go get -v github.com/davyxu/golog
+  go get -u -v github.com/davyxu/golog
 
-  go get -v github.com/davyxu/goobjfmt
+  go get -u -v github.com/davyxu/goobjfmt
 
-  go get -v github.com/davyxu/protoplus
+  go get -u -v github.com/davyxu/protoplus
 ```
 
 # 第三方库
