@@ -7,7 +7,7 @@ import (
 )
 
 type RemoteCallMsg interface {
-	GetMsgID() uint16
+	GetMsgID() uint32
 	GetMsgData() []byte
 	GetCallID() int64
 }
