@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 )
 
-// 字符串转为32位整形哈希
+// 字符串转为32位整形哈希 FNV-1
 func StringHash(s string) uint32 {
 	offset := 2166136261
 	prime := 16777619
@@ -19,6 +19,15 @@ func StringHash(s string) uint32 {
 		hash ^= uint32(uint8(c))
 	}
 	return hash
+}
+
+// 字符串转为16位整形哈希
+func StringHashOld(s string) (hash uint16) {
+	for _, c := range s {
+		ch := uint16(c)
+		hash = hash + ((hash) << 5) + ch + (ch << 7)
+	}
+	return
 }
 
 // 字节计算MD5
